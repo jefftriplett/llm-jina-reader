@@ -1,6 +1,6 @@
 [project]
 name = "llm-jina-reader"
-version = "2025.4.1"
+version = "2025.4.2"
 description = "LLM plugin for pulling content from Jina Reader API"
 readme = "README.md"
 authors = [{name = "Jeff Triplett"}]
