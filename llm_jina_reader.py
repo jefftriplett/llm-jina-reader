@@ -18,7 +18,7 @@ def register_template_loaders(register):
     register("jina", file_template_loader)
 
 
-def _get_jina_response(url_path: str) -> httpx.Response:
+def _get_jina_response(*, url_path: str) -> httpx.Response:
     token = os.environ.get("JINA_READER_TOKEN")
     if not token:
         raise ValueError("JINA_READER_TOKEN environment variable not set")
@@ -38,7 +38,7 @@ def _get_jina_response(url_path: str) -> httpx.Response:
 
 
 def jina_reader_loader(argument: str) -> List[Fragment]:
-    response = _get_jina_response(argument)
+    response = _get_jina_response(url_path=argument)
     
     fragments = []
     fragments.append(
@@ -51,20 +51,13 @@ def jina_reader_loader(argument: str) -> List[Fragment]:
 
 
 def file_template_loader(template_path: str) -> Template:
-    response = _get_jina_response(template_path)
+    response = _get_jina_response(url_path=template_path)
 
     system_content = response.text
-
-    print(system_content)
 
     template_args = {
         "name": template_path,
         "system": system_content,
-        # "user": "",
     }
-
-    # try:
-    # except yaml.YAMLError as ex:
-    #     raise ValueError(f"Invalid YAML in template file: {ex}")
 
     return Template(**template_args)

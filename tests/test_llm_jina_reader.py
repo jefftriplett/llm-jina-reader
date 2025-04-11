@@ -20,9 +20,7 @@ def test_jina_reader_loader():
 
         # Verify the fragment content
         assert len(fragments) == 1
-        print(dir(fragments[0]))
-
-        assert fragments[0].content == "This is the Jina content"
+        assert fragments[0] == "This is the Jina content"
         assert fragments[0].source == "https://r.jina.ai/https://example.com/content"
 
 
@@ -63,12 +61,12 @@ def test_get_jina_response():
     # Test with missing token
     with patch.dict(os.environ, {}, clear=True):
         with pytest.raises(ValueError, match="JINA_READER_TOKEN environment variable not set"):
-            _get_jina_response("https://example.com/content")
+            _get_jina_response(url_path="https://example.com/content")
 
     # Test with token but invalid URL
     with patch.dict(os.environ, {"JINA_READER_TOKEN": "test_token"}):
         with pytest.raises(ValueError, match="INVALID url"):
-            _get_jina_response("invalid-url")
+            _get_jina_response(url_path="invalid-url")
 
     # Test with token and valid URL
     with patch.dict(os.environ, {"JINA_READER_TOKEN": "test_token"}):
@@ -77,7 +75,7 @@ def test_get_jina_response():
             mock_response.status_code = 200
             mock_get.return_value = mock_response
 
-            response = _get_jina_response("https://example.com/content")
+            response = _get_jina_response(url_path="https://example.com/content")
             
             # Verify httpx.get was called with correct parameters
             mock_get.assert_called_once_with(
@@ -95,4 +93,4 @@ def test_get_jina_response_http_error():
             mock_get.side_effect = Exception("HTTP error")
 
             with pytest.raises(ValueError, match="Could not load content"):
-                _get_jina_response("https://example.com/content")
+                _get_jina_response(url_path="https://example.com/content")

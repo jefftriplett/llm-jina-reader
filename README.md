@@ -28,26 +28,28 @@ export JINA_READER_TOKEN="your-jina-reader-token"
 
 ## Usage
 
-You can feed a full conversation thread from Jina Reader into LLM using the `jina:` [fragment](https://llm.datasette.io/en/stable/fragments.html) with the ID of the conversation. For example:
+You can feed a full conversation thread from Jina Reader into LLM using the `jina:` [fragment](https://llm.datasette.io/en/stable/fragments.html) with the URL that you want to prompt against. For example:
 
 ```bash
-llm -f jina:43615912 'summary with illustrative direct quotes'
+llm --fragment jina:https://simonwillison.net/2025/Apr/7/long-context-llm/ "Please summarize this post in one sentence."
 ```
-Item IDs can be found in the URL of the conversation thread.
 
 ## Development
 
-To set up this plugin locally, first checkout the code. Then create a new virtual environment:
+To set up this plugin locally, first checkout the code. Then create a new virtual environment or just use `uv`, it's easier:
+
 ```bash
 cd llm-jina-reader
-python -m venv venv
-source venv/bin/activate
 ```
+
 Now install the dependencies and test dependencies:
+
 ```bash
-pip install -e '.[test]'
+uv sync --all-extras
 ```
+
 To run the tests:
+
 ```bash
-python -m pytest
+uv run pytest
 ```
