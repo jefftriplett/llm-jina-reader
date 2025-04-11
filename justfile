@@ -1,6 +1,9 @@
 @_default:
     just --list
 
+@build:
+    uv build
+
 @demo:
     just demo-fragment
     just demo-template
