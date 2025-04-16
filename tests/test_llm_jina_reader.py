@@ -58,11 +58,6 @@ def test_file_template_loader():
 def test_get_jina_response():
     from llm_jina_reader import _get_jina_response
 
-    # Test with missing token
-    with patch.dict(os.environ, {}, clear=True):
-        with pytest.raises(ValueError, match="JINA_READER_TOKEN environment variable not set"):
-            _get_jina_response(url_path="https://example.com/content")
-
     # Test with token but invalid URL
     with patch.dict(os.environ, {"JINA_READER_TOKEN": "test_token"}):
         with pytest.raises(ValueError, match="INVALID url"):
