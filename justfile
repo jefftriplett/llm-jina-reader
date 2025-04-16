@@ -27,5 +27,8 @@
     just uninstall
     just install
 
+@test:
+    uv run pytest
+
 @uninstall:
     llm uninstall --yes llm-jina-reader
