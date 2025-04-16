@@ -20,8 +20,6 @@ def register_template_loaders(register):
 
 def _get_jina_response(*, url_path: str) -> httpx.Response:
     token = os.environ.get("JINA_READER_TOKEN")
-    if not token:
-        raise ValueError("JINA_READER_TOKEN environment variable not set")
 
     if url_path.startswith(("http://", "https://")):
         jina_url = f"https://r.jina.ai/{url_path}"
@@ -29,7 +27,9 @@ def _get_jina_response(*, url_path: str) -> httpx.Response:
         raise ValueError("INVALID url")
     
     try:
-        headers = {"Authorization": f"Bearer {token}"}
+        headers = {}
+        if token:
+            headers["Authorization"] = f"Bearer {token}"
         response = httpx.get(jina_url, headers=headers)
         response.raise_for_status()
         return response
